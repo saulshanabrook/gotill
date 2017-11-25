@@ -20,7 +20,6 @@ func main() {
 	var rightLine = regexp.MustCompile(os.Args[1])
 
 	cmd := exec.Command(os.Args[2], os.Args[3:]...)
-	handleErr(cmd.Start())
 
 	// pipe all stderr to our stderr without processing
 	stderr, err := cmd.StderrPipe()
@@ -32,6 +31,9 @@ func main() {
 
 	stdout, err := cmd.StdoutPipe()
 	handleErr(err)
+
+	handleErr(cmd.Start())
+
 	scanner := bufio.NewScanner(stdout)
 	foundLine := false
 	for scanner.Scan() {
